@@ -1,8 +1,8 @@
-# Metadata Normalizer - ETECHS (Task 1: Environment Setup)
+# Metadata Normalizer - ETECHS
 
 Module chuẩn hóa dữ liệu cho MongoDB metadata collections trong dự án Data Warehouse & Middleware - ETECHS.
 
-## 1. Cấu trúc thư mục (Sau Task 1)
+## 1. Cấu trúc thư mục (Hoàn thành Task 2)
 ```text
 metadata_normalizer/
 ├── config/
@@ -10,11 +10,14 @@ metadata_normalizer/
 │   ├── .env                 # Biến môi trường kết nối MongoDB (Không commit lên Git)
 │   └── database.py          # Singleton class quản lý kết nối MongoDB
 ├── models/
-│   └── __init__.py          # Khởi tạo models package
+│   ├── __init__.py          # Export tất cả các model ra package root
+│   ├── base.py              # BaseMetaModel (class cha) & PyObjectId (validator v2)
+│   └── student_profile_meta.py # Schema & validation cho student_profile_meta (Task 2)
 ├── services/
 │   └── __init__.py          # Khởi tạo services package
 ├── tests/
-│   └── __init__.py          # Khởi tạo tests package
+│   ├── __init__.py          # Khởi tạo tests package
+│   └── test_student_profile_meta.py # Unit tests cho class StudentProfileMeta (Task 2)
 ├── .gitignore               # Loại bỏ venv, file cấu hình bảo mật .env, cache
 ├── README.md                # Tài liệu hướng dẫn dự án
 └── requirements.txt         # Khai báo các thư viện phụ thuộc (pinned versions)
@@ -50,9 +53,9 @@ pip install -r requirements.txt
 ```
 
 ## 4. Cấu hình Kết nối CSDL (`config/.env`)
-Tạo file `config/.env` với nội dung cấu hình phù hợp với môi trường local của bạn:
+Tạo file `config/.env` với nội dung cấu hình phù hợp với môi trường local của bạn (Sử dụng cổng `27018` để tránh xung đột cổng):
 ```env
-MONGO_URI=mongodb://localhost:27017
+MONGO_URI=mongodb://localhost:27018
 MONGO_DB_NAME=etechs_metadata
 MONGO_TEST_DB_NAME=etechs_metadata_test
 ```
@@ -61,4 +64,15 @@ MONGO_TEST_DB_NAME=etechs_metadata_test
 Để đảm bảo cấu hình kết nối MongoDB thông qua `config/database.py` hoạt động chính xác:
 ```bash
 python -c "import sys; sys.path.insert(0, '.'); from config.database import Database; print('Kết nối:', Database.get_client())"
+```
+
+## 6. Chạy Unit Tests (pytest)
+Để chạy các bài kiểm thử tự động cho `StudentProfileMeta` (Task 2):
+```bash
+pytest tests/test_student_profile_meta.py -v
+```
+
+Để đo độ bao phủ code coverage:
+```bash
+pytest tests/ -v --cov=models
 ```
