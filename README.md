@@ -2,7 +2,7 @@
 
 Module chuẩn hóa dữ liệu cho MongoDB metadata collections trong dự án Data Warehouse & Middleware - ETECHS.
 
-## 1. Cấu trúc thư mục (Hoàn thành Task 2)
+## 1. Cấu trúc thư mục (Hoàn thành Task 3)
 ```text
 metadata_normalizer/
 ├── config/
@@ -12,9 +12,11 @@ metadata_normalizer/
 ├── models/
 │   ├── __init__.py          # Export tất cả các model ra package root
 │   ├── base.py              # BaseMetaModel (class cha) & PyObjectId (validator v2)
-│   └── student_profile_meta.py # Schema & validation cho student_profile_meta (Task 2)
+│   ├── student_profile_meta.py # Schema & validation cho student_profile_meta (Task 2)
+│   └── education_meta.py    # Schema & validation cho education_meta (Task 3)
 ├── services/
-│   └── __init__.py          # Khởi tạo services package
+│   ├── __init__.py          # Export MetadataService ra package root
+│   └── metadata_service.py  # MetadataService dùng chung để CRUD và đánh index MongoDB (Task 3)
 ├── tests/
 │   ├── __init__.py          # Khởi tạo tests package
 │   └── test_student_profile_meta.py # Unit tests cho class StudentProfileMeta (Task 2)

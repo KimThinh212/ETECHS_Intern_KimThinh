@@ -7,6 +7,10 @@ from models.student_profile_meta import (
     PrivacyLevel,
     UserTag
 )
+from models.education_meta import (
+    EducationMeta,
+    VerificationStatus
+)
 
 __all__ = [
     "BaseMetaModel",
@@ -16,5 +20,7 @@ __all__ = [
     "PrivacySettings",
     "Onboarding",
     "PrivacyLevel",
-    "UserTag"
+    "UserTag",
+    "EducationMeta",
+    "VerificationStatus"
 ]
