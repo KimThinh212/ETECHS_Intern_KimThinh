@@ -2,28 +2,33 @@
 
 Module chuẩn hóa dữ liệu cho MongoDB metadata collections trong dự án Data Warehouse & Middleware - ETECHS.
 
-## 1. Cấu trúc thư mục
+## 1. Cấu trúc thư mục (Hoàn thành cả 5 Tasks)
 ```text
 metadata_normalizer/
+│
 ├── config/
-│   ├── __init__.py          # Khởi tạo config package
-│   ├── .env                 # Biến môi trường kết nối MongoDB (Không commit lên Git)
-│   └── database.py          # Singleton class quản lý kết nối MongoDB
+│   ├── __init__.py             # Đóng gói package config (rỗng)
+│   ├── .env                    # MONGO_URI, MONGO_DB_NAME, MONGO_TEST_DB_NAME
+│   └── database.py             # Database singleton class (kết nối MongoDB)
+│
 ├── models/
-│   ├── __init__.py          # Export tất cả các model ra package root
-│   ├── base.py              # BaseMetaModel (class cha) & PyObjectId (validator v2)
-│   ├── student_profile_meta.py # Schema & validation cho student_profile_meta (Task 2)
-│   └── education_meta.py    # Schema & validation cho education_meta (Task 3)
+│   ├── __init__.py             # Export tất cả models ra package root
+│   ├── base.py                 # BaseMetaModel (class cha) + PyObjectId (tương thích Pydantic v2)
+│   ├── student_profile_meta.py # StudentProfileMeta + enums + sub-models (Task 2)
+│   └── education_meta.py       # EducationMeta + VerificationStatus (Task 3)
+│
 ├── services/
-│   ├── __init__.py          # Export MetadataService ra package root
-│   └── metadata_service.py  # MetadataService dùng chung để CRUD và đánh index MongoDB (Task 3)
+│   ├── __init__.py             # Đóng gói package services
+│   └── metadata_service.py     # MetadataService cung cấp các hàm CRUD và đánh index MongoDB (Task 3)
+│
 ├── tests/
-│   ├── __init__.py          # Khởi tạo tests package
-│   ├── test_student_profile_meta.py # Unit tests cho class StudentProfileMeta (Task 2)
-│   └── test_education_meta.py       # Unit tests cho class EducationMeta (Task 4)
-├── .gitignore               # Loại bỏ venv, file cấu hình bảo mật .env, cache
-├── README.md                # Tài liệu hướng dẫn dự án
-└── requirements.txt         # Khai báo các thư viện phụ thuộc (pinned versions)
+│   ├── __init__.py             # Đóng gói package tests (rỗng)
+│   ├── test_student_profile_meta.py  # 8+ test cases cho StudentProfileMeta (Task 2/4)
+│   └── test_education_meta.py        # 10+ test cases cho EducationMeta (Task 4)
+│
+├── main.py                     # Script demo tích hợp toàn bộ hệ thống (Task 5)
+├── requirements.txt            # Thư viện phụ thuộc của dự án
+└── README.md                   # Hướng dẫn cài đặt, chạy thử và kiểm thử dự án
 ```
 
 ## 2. Các thư viện chính sử dụng
@@ -56,34 +61,26 @@ pip install -r requirements.txt
 ```
 
 ## 4. Cấu hình Kết nối CSDL (`config/.env`)
-Tạo file `config/.env` với nội dung cấu hình phù hợp với môi trường local của bạn (Sử dụng cổng `27018` để tránh xung đột cổng):
+Tạo file `config/.env` với nội dung cấu hình phù hợp với môi trường local của bạn:
 ```env
-MONGO_URI=mongodb://localhost:27018
+MONGO_URI=mongodb://localhost:27017
 MONGO_DB_NAME=etechs_metadata
 MONGO_TEST_DB_NAME=etechs_metadata_test
 ```
 
-## 5. Chạy kiểm tra kết nối Database
-Để đảm bảo cấu hình kết nối MongoDB thông qua `config/database.py` hoạt động chính xác:
+## 5. Chạy Demo Tích Hợp (`main.py`)
+Đảm bảo bạn đã khởi động MongoDB Server trên cổng `27017`.
+Chạy lệnh sau để kiểm tra tích hợp đầy đủ hệ thống:
 ```bash
-python -c "import sys; sys.path.insert(0, '.'); from config.database import Database; print('Kết nối:', Database.get_client())"
+python main.py
 ```
+Script sẽ tự động tạo index, thêm (Create), đọc (Read), cập nhật trạng thái (Update) dữ liệu của cả hai collections `student_profile_meta` và `education_meta` xuống database thực tế.
 
 ## 6. Chạy Unit Tests (pytest)
 Để chạy toàn bộ các bài kiểm thử tự động (Task 4):
 ```bash
 pytest tests/ -v
 ```
-
-Để chạy riêng lẻ từng bộ kiểm thử:
-* **Kiểm thử StudentProfileMeta (Task 2):**
-  ```bash
-  pytest tests/test_student_profile_meta.py -v
-  ```
-* **Kiểm thử EducationMeta (Task 4):**
-  ```bash
-  pytest tests/test_education_meta.py -v
-  ```
 
 Để đo độ bao phủ code coverage:
 ```bash
