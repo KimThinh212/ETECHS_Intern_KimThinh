@@ -2,7 +2,7 @@
 
 Module chuẩn hóa dữ liệu cho MongoDB metadata collections trong dự án Data Warehouse & Middleware - ETECHS.
 
-## 1. Cấu trúc thư mục (Hoàn thành Task 3)
+## 1. Cấu trúc thư mục
 ```text
 metadata_normalizer/
 ├── config/
@@ -19,7 +19,8 @@ metadata_normalizer/
 │   └── metadata_service.py  # MetadataService dùng chung để CRUD và đánh index MongoDB (Task 3)
 ├── tests/
 │   ├── __init__.py          # Khởi tạo tests package
-│   └── test_student_profile_meta.py # Unit tests cho class StudentProfileMeta (Task 2)
+│   ├── test_student_profile_meta.py # Unit tests cho class StudentProfileMeta (Task 2)
+│   └── test_education_meta.py       # Unit tests cho class EducationMeta (Task 4)
 ├── .gitignore               # Loại bỏ venv, file cấu hình bảo mật .env, cache
 ├── README.md                # Tài liệu hướng dẫn dự án
 └── requirements.txt         # Khai báo các thư viện phụ thuộc (pinned versions)
@@ -69,12 +70,22 @@ python -c "import sys; sys.path.insert(0, '.'); from config.database import Data
 ```
 
 ## 6. Chạy Unit Tests (pytest)
-Để chạy các bài kiểm thử tự động cho `StudentProfileMeta` (Task 2):
+Để chạy toàn bộ các bài kiểm thử tự động (Task 4):
 ```bash
-pytest tests/test_student_profile_meta.py -v
+pytest tests/ -v
 ```
+
+Để chạy riêng lẻ từng bộ kiểm thử:
+* **Kiểm thử StudentProfileMeta (Task 2):**
+  ```bash
+  pytest tests/test_student_profile_meta.py -v
+  ```
+* **Kiểm thử EducationMeta (Task 4):**
+  ```bash
+  pytest tests/test_education_meta.py -v
+  ```
 
 Để đo độ bao phủ code coverage:
 ```bash
-pytest tests/ -v --cov=models
+pytest tests/ -v --cov=models --cov-report=term-missing
 ```
